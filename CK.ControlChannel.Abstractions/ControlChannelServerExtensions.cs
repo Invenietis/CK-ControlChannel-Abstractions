@@ -1,7 +1,6 @@
-﻿using CK.ControlChannel.Abstractions;
+using CK.ControlChannel.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace CK.ControlChannel
 {
@@ -12,15 +11,19 @@ namespace CK.ControlChannel
         /// </summary>
         /// <param name="this">The <see cref="IControlChannelServer"/> to use</param>
         /// <param name="channelName">The name of the channel</param>
-        /// <param name="data">The data to send</param>
-        public static void Broadcast( this IControlChannelServer @this, string channelName, byte[] data )
+        /// <param name="payload">The data to send</param>
+        public static async Task BroadcastAsync( this IControlChannelServer @this, string channelName, byte[] payload )
         {
             if( @this == null ) { throw new ArgumentNullException( nameof( @this ) ); }
             if( channelName == null ) { throw new ArgumentNullException( nameof( channelName ) ); }
 
             foreach( IServerClientSession session in @this.ActiveSessions )
             {
-                session.Send( channelName, data );
+                IOutgoingChannel channel = session.GetOutgoingChannel( channelName );
+                if( channel.CanSend )
+                {
+                    await channel.SendAsync( payload );
+                }
             }
         }
     }

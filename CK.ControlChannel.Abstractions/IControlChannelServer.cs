@@ -1,17 +1,15 @@
-﻿using CK.Core;
-using System;
+using CK.Core;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CK.ControlChannel.Abstractions
 {
     /// <summary>
-    /// Delegate called when handling data received on a channel
+    /// Delegate called when handling data received on an incoming channel
     /// </summary>
     /// <param name="monitor">A monitor created by this <see cref="IControlChannelServer"/> upon receiving data</param>
-    /// <param name="data">Data received</param>
+    /// <param name="payload">Data received</param>
     /// <param name="clientSession">Session of this client</param>
-    public delegate void ServerChannelDataHandler( IActivityMonitor monitor, byte[] data, IServerClientSession clientSession );
+    public delegate void ServerChannelDataHandler( IActivityMonitor monitor, byte[] payload, IServerClientSession clientSession );
 
     /// <summary>
     /// Control channel server interface

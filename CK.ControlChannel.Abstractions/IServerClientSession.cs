@@ -1,12 +1,7 @@
-﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using CK.Core;
-using System.Text;
 
 namespace CK.ControlChannel.Abstractions
 {
-
     /// <summary>
     /// A session opened between the client and server
     /// </summary>
@@ -28,21 +23,22 @@ namespace CK.ControlChannel.Abstractions
         bool IsConnected { get; }
 
         /// <summary>
-        /// Returns true if this session was authenticated by the server, and can send and receive messages.
+        /// Returns true if this session was successfully authenticated by the server,
+        /// and can send and receive messages.
         /// </summary>
         bool IsAuthenticated { get; }
 
         /// <summary>
-        /// Send data to this client on the given channel.
-        /// </summary>
-        /// <param name="channel">Name of the channel</param>
-        /// <param name="data">Data to send</param>
-        void Send( string channel, byte[] data );
-
-        /// <summary>
-        /// Data provided by the client when authenticating
+        /// Data provided by the client when authenticating.
+        /// Contents depend on implementation.
         /// </summary>
         IReadOnlyDictionary<string, string> ClientData { get; }
-    }
 
+        /// <summary>
+        /// Gets an outgoing channel with the given <paramref name="channelName"/> connected in this <see cref="IServerClientSession"/>.
+        /// </summary>
+        /// <param name="channelName">Name of the channel to obtain.</param>
+        /// <returns>An <see cref="IOutgoingChannel"/> with the given <paramref name="channelName"/> connected to this <see cref="IServerClientSession"/>.</returns>
+        IOutgoingChannel GetOutgoingChannel( string channelName );
+    }
 }

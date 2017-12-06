@@ -1,17 +1,14 @@
 using CK.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CK.ControlChannel.Abstractions
 {
     /// <summary>
-    /// Delegate called when handling data received on a channel from the connected server
+    /// Delegate called when handling data received on an incoming channel from the connected server
     /// </summary>
     /// <param name="monitor">A monitor created by this <see cref="IControlChannelClient"/> upon receiving data</param>
-    /// <param name="data">Data received</param>
-    public delegate void ClientChannelDataHandler( IActivityMonitor monitor, byte[] data );
+    /// <param name="payload">Data received</param>
+    public delegate void ClientChannelDataHandler( IActivityMonitor monitor, byte[] payload );
 
     /// <summary>
     /// Client for IControlChannelServer implementations.
@@ -39,17 +36,17 @@ namespace CK.ControlChannel.Abstractions
         bool IsOpen { get; }
 
         /// <summary>
-        /// Registers a data handler for the given <paramref name="channelName"/>.
+        /// Registers a data handler for message payloads coming in an incoming channel with the given <paramref name="channelName"/>.
         /// </summary>
         /// <param name="channelName">Name of the channel</param>
         /// <param name="handler">Data handler</param>
-        void RegisterChannelHandler( string channelName, ClientChannelDataHandler handler );
+        Task RegisterChannelHandlerAsync( string channelName, ClientChannelDataHandler handler );
 
         /// <summary>
-        /// Sends data to the connected server.
+        /// Opens, or gets an already-open outgoing channel with the server.
         /// </summary>
-        /// <param name="channelName">Name of the channel</param>
-        /// <param name="data">Data to send</param>
-        Task SendAsync( string channelName, byte[] data );
+        /// <param name="channelName">Name of the channel to obtain.</param>
+        /// <returns>An awaitable task resolving with an <see cref="IOutgoingChannel"/> with the given <paramref name="channelName"/>.</returns>
+        Task<IOutgoingChannel> OpenOutgoingChannelAsync( string channelName );
     }
 }
