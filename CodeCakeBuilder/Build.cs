@@ -1,4 +1,4 @@
-﻿using Cake.Common.Build;
+using Cake.Common.Build;
 using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Common.Solution;
@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using CK.Text;
+using System.IO;
 
 namespace CodeCake
 {
@@ -49,6 +50,9 @@ namespace CodeCake
     {
         public Build()
         {
+            // cd ..
+            Environment.CurrentDirectory = Directory.GetParent( Environment.CurrentDirectory ).FullName;
+
             Cake.Log.Verbosity = Verbosity.Diagnostic;
 
             const string solutionName = "CK-ControlChannel-Abstractions";
